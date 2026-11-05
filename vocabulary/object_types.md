@@ -1,0 +1,20 @@
+# Object types
+
+Part of the [task classification](../task_classification.md) · **Object types** · [Roles](roles.md) · [Operations](operations.md) · [Categories](categories.md)
+
+The types of objects an [operation](operations.md) reads and writes.
+
+| Object | Content | Subtypes | nf-bioimage-spec aliases |
+|---|---|---|---|
+| <a id="image"></a>Image | Pixel intensities, one or more channels. | intensity, probability | `Image` |
+| <a id="label"></a>Label | Integers on an image grid. | instance (one ID per object), class map (one value per class), skeleton | `LabelMask`, `ClassMask`, `SkeletonMask` |
+| <a id="table"></a>Table | Rows of values under a header. | ROI, masking ROI, feature, condition, parameter | `Tabular`, `Scalar` |
+| <a id="point-cloud"></a>Point cloud | Points with attributes. | | `Points` |
+| <a id="vector"></a>Vector | 2D polygons and lines outlining objects. | | `Vector` |
+| <a id="mesh"></a>Mesh | Vertices and faces of an object's surface. | | |
+| <a id="graph"></a>Graph | Objects as nodes, links as edges. | tree, tracks, tracks with divisions | `SWC`, `Tracks`, `TracksWithDivision` |
+| <a id="files"></a>Files | Anything outside OME-Zarr: raw acquisition files, collected metadata, exports. | | |
+
+A subtype is named only where it changes what an operation accepts.
+
+OME-Zarr has no adopted format for point clouds, vectors, meshes or graphs yet: one must be chosen before the first task that writes them.

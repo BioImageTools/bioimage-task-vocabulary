@@ -1,0 +1,77 @@
+# Operations
+
+Part of the [task classification](../task_classification.md) · [Object types](object_types.md) · [Roles](roles.md) · **Operations** · [Categories](categories.md)
+
+An operation is characterized by the [types](object_types.md) and [roles](roles.md) of the objects it reads and writes. Roles in parentheses, optional inputs in brackets. Operations are grouped into [categories](categories.md).
+
+| Operation | I/O | Example | EDAM class | nf-bioimage-spec |
+|---|---|---|---|---|
+| <a id="collect"></a>*collect* | Files → Files | acquisition metadata of tiles and channels | | |
+| <a id="fix"></a>*fix* | Files → Files | correct collected metadata | [Editing][operation_3096] | |
+| <a id="convert"></a>*convert* | Files → Image | write OME-Zarr from raw tiles | [Conversion][operation_3434] | |
+| <a id="estimate"></a>*estimate* | Image + Image (reference) → parameter Table | channel shifts | | `Stitch` |
+| | Image → Image (parameter) | flatfield | | |
+| | Point cloud + Point cloud (reference) → parameter Table | point-set registration (ICP) | | |
+| <a id="apply"></a>*apply* | Image + Table or Image (parameter) → Image | apply shifts, flatfield | | `ImgProc` |
+| | Point cloud + parameter Table → Point cloud | move spots into the reference frame | | |
+| <a id="enhance"></a>*enhance* | Image → Image | background subtraction, denoising, deconvolution | [Image enhancement][operation_Image_enhancement] | `ImgProc` |
+| <a id="project"></a>*project* | Image → Image | maximum intensity projection | [Image projection][operation_Projection] | |
+| | Label → Label | 3D label to 2D | | |
+| <a id="rearrange"></a>*rearrange* | Image → Image | stitch, move FOVs back to their positions | [Image stitching][operation_Image_stitching] | `Stitch` |
+| <a id="crop"></a>*crop* | Image [+ ROI Table (parameter)] → Image | crop to ROI | [Image crop][operation__Rhb4iyLUQWY4HnhPpuqNNI] | |
+| <a id="rescale"></a>*rescale* | Image → Image, Label → Label | bin, upscale | [Geometrical transformation][operation_Geometrical_transform] | |
+| <a id="predict"></a>*predict* | Image → probability Image or class map Label | pixel classifier, semantic segmentation | [Pixel classification][operation_Pixel_classification] | `PixCla` |
+| <a id="detect"></a>*detect* | Image [+ Label (mask)] → instance Label | thresholding, superpixels, Cellpose | [Image segmentation][operation_Image_segmentation] | `ObjSeg` |
+| | Image [+ Label (mask)] → Point cloud | spot detection | [Spot detection][operation_Spot_extraction] | `ObjDet`, `LndDet` |
+| <a id="split"></a>*split* | instance Label + Image (guide) → instance Label | watershed | [Watershed segmentation][operation_Watershed] | |
+| <a id="filter"></a>*filter* | instance Label [+ feature Table (guide)] → instance Label | remove objects by size, shape, position or feature | | |
+| <a id="grow-shrink"></a>*grow / shrink* | instance Label → instance Label | expand, erode, fill holes | [Morphological operation][operation_Morphological_operations] | |
+| <a id="relabel"></a>*relabel* | instance Label + Graph (parameter) → instance Label | one ID per track | | |
+| <a id="relate"></a>*relate* | instance Label + instance Label (reference) → feature Table | nucleus → cell | [Overlap analysis][operation_____Overlap_analysis] | |
+| <a id="link"></a>*link* | instance Label or Point cloud → Graph | across time, cycles, z planes, FOV borders; with or without divisions | [Object tracking][operation_Image_tracking] | `PrtTrk`, `ObjTrk` |
+| <a id="trace"></a>*trace* | Image → tree Graph | filament trees | [Filament tracing][operation__R9Qf06vxvFj2UbAk7pW3IMG] | `TreTrc` |
+| | Image → skeleton Label | filament networks with loops | [Skeletonisation][operation_Skeletonization] | `LooTrc` |
+| <a id="assign"></a>*assign* | Point cloud + instance Label (reference) → feature Table | spots per cell | | |
+| <a id="rasterize"></a>*rasterize* | Point cloud or Vector + Image (reference) → instance Label | annotations to labels | | `Raster` |
+| <a id="vectorize"></a>*vectorize* | instance Label → Vector | object outlines | | `Seg2Vec` |
+| <a id="mesh"></a>*mesh* | instance Label → Mesh | marching cubes | | |
+| <a id="smooth-simplify"></a>*smooth / simplify* | Mesh → Mesh | | | |
+| <a id="measure"></a>*measure* | instance Label [+ intensity Image] [+ Label (mask)] → feature Table | intensity, morphology, texture | [Object feature extraction][operation_Feature_extraction] | `FeatExt` |
+| | Mesh → feature Table | surface area, curvature | | |
+| | Graph → feature Table | speed, displacement, lineage | [Trajectory analysis][operation___Trajectory_analysis] | |
+| <a id="count"></a>*count* | Image → feature Table (per FOV) | objects counted without segmenting | [Object counting][operation_Cell_counting] | `SptCnt` |
+| <a id="cluster"></a>*cluster* | Point cloud → feature Table, feature Table → feature Table | density, colocalization, phenotypes | [Clustering][operation___Clustering] | |
+| <a id="classify"></a>*classify* | feature Table → feature Table | object classifier | [Object classification][operation__RyCFuPLOeGxpcGjYbWcWWD] | |
+| <a id="normalize"></a>*normalize* | feature Table + condition Table (reference) → feature Table | to controls | | |
+| <a id="aggregate"></a>*aggregate* | feature Table → feature Table | objects to wells | | |
+| <a id="paint"></a>*paint* | instance Label + feature Table (parameter) → class map Label | classes back into a label | | |
+| <a id="score"></a>*score* | Image or Label → feature Table | focus, saturation, object counts | [Image validation][operation___Image_validation] | |
+| <a id="export"></a>*export* | any → Files | TIFF/PNG, CSV/Parquet, meshes | [Conversion][operation_3434] | |
+
+The EDAM class column gives the closest [EDAM-Bioimaging](https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING/?p=classes) operation where one exists. It is left blank where EDAM has no class for the operation itself; *estimate* and *apply*, for example, are covered by the categories they serve.
+
+The nf-bioimage-spec column gives the matching category of nf-bioimage-spec, whose categories 3–11 come from the [NEUBIAS / BIAFLOWS problem classes](https://neubias-wg5.github.io/problem_class_ground_truth.html). `ObjTrk` is *detect* and *link* together.
+
+<!-- EDAM-Bioimaging links. Key = EDAM ID; the URL is the BioPortal page for http://edamontology.org/<ID>. -->
+[operation_3096]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_3096
+[operation_3434]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_3434
+[operation_Image_enhancement]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_Image_enhancement
+[operation_Projection]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_Projection
+[operation_Image_stitching]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_Image_stitching
+[operation__Rhb4iyLUQWY4HnhPpuqNNI]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation__Rhb4iyLUQWY4HnhPpuqNNI
+[operation_Geometrical_transform]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_Geometrical_transform
+[operation_Pixel_classification]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_Pixel_classification
+[operation_Image_segmentation]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_Image_segmentation
+[operation_Spot_extraction]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_Spot_extraction
+[operation_Watershed]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_Watershed
+[operation_Morphological_operations]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_Morphological_operations
+[operation_____Overlap_analysis]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_____Overlap_analysis
+[operation_Image_tracking]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_Image_tracking
+[operation__R9Qf06vxvFj2UbAk7pW3IMG]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation__R9Qf06vxvFj2UbAk7pW3IMG
+[operation_Skeletonization]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_Skeletonization
+[operation_Feature_extraction]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_Feature_extraction
+[operation___Trajectory_analysis]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation___Trajectory_analysis
+[operation_Cell_counting]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_Cell_counting
+[operation___Clustering]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation___Clustering
+[operation__RyCFuPLOeGxpcGjYbWcWWD]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation__RyCFuPLOeGxpcGjYbWcWWD
+[operation___Image_validation]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation___Image_validation
