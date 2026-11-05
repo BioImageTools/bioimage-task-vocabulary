@@ -85,23 +85,38 @@ The last column gives the matching category of nf-bioimage-spec, whose categorie
 
 A category is a functional group from the image analyst's point of view: the step of the analysis a task serves.
 
-| Category | Operations | Task examples |
-|---|---|---|
-| Conversion | collect, fix, convert | metadata collection, metadata fixes, conversion from Yokogawa, Opera/Operetta, CZI, ND2, … |
-| Image Correction | estimate, apply, enhance | illumination correction, flatfield estimation, background subtraction, denoising, deconvolution, spectral unmixing, … |
-| Registration | estimate, apply, crop | channel alignment, shift estimation, multiplex cycle registration, point cloud registration, … |
-| Image Reshaping | project, rearrange, crop, rescale | projection, montage, stitching, crop to ROI, rescale, … |
-| Segmentation | predict, detect, split, filter, grow / shrink, relate | threshold segmentation, superpixel segmentation, watershed segmentation, object filtering, Cellpose, StarDist, expand labels, nucleus → cell, … |
-| Spot Detection | detect | spots, landmarks, … |
-| Object Tracking | detect, link, relabel, measure | particle tracking, spot tracking, object tracking with divisions, track features, … |
-| Filament Tracing | trace | filament trees, filament networks, … |
-| Shape Conversion | vectorize, rasterize, mesh, smooth / simplify | labels to outlines and back, label to mesh, … |
-| Feature Extraction | measure, count, assign | intensity, morphology, texture, colocalization, neighbour distances, surface features, object counts, spots per cell, … |
-| Data Analysis | classify, cluster, normalize, aggregate, paint, … | object classifier, spot clusters, well summaries, hit calling, … |
-| Quality Control | score | focus, saturation, empty FOVs, segmentation statistics, … |
-| Export | export | thumbnails, tables, meshes, … |
+Categories follow the operation classes of [EDAM-Bioimaging](https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING/?p=classes) (release alpha06, whose operation tree matches the current development version). A category takes the EDAM label and ID when a matching class exists; IDs are relative to `http://edamontology.org/`. Categories with no EDAM class are marked *local*, with the nearest EDAM class in brackets.
 
-An operation can appear in several categories: *estimate* and *apply* in Image Correction and Registration, *link* in Object Tracking and in Image Reshaping when merging objects across FOVs.
+| Category | EDAM class | Operations | Task examples |
+|---|---|---|---|
+| Conversion | `operation_3434` | collect, fix, convert | metadata collection, metadata fixes, conversion from Yokogawa, Opera/Operetta, CZI, ND2, … |
+| Image correction | `operation__R7MFwdgojfmkZ07yWbdcda0` | estimate, apply | illumination correction, flatfield estimation, spectral unmixing, drift correction, chromatic aberration correction, … |
+| Image enhancement | `operation_Image_enhancement` | enhance | background subtraction, denoising, smoothing, contrast enhancement, deconvolution¹, … |
+| Image registration | `operation_Image_registration` | estimate, apply, crop | channel alignment, shift estimation, multiplex cycle registration, point cloud registration, … |
+| Image reshaping | *local* (nearest: Image processing, `operation_Image_processing`) | project, rearrange, crop, rescale, link | projection², montage², stitching³, crop to ROI (Image crop), rescale (Geometrical transformation), … |
+| Image segmentation | `operation_Image_segmentation` | predict, detect, split, filter, grow / shrink, relate | threshold segmentation, superpixel segmentation, watershed segmentation, object filtering, Cellpose, StarDist, expand labels, nucleus → cell, … |
+| Spot detection | `operation_Spot_extraction` | detect | spots, landmarks, … |
+| Object tracking | `operation_Image_tracking` | detect, link, relabel, measure | particle tracking, spot tracking, object tracking with divisions, track features, … |
+| Filament tracing | `operation__R9Qf06vxvFj2UbAk7pW3IMG` | trace | filament trees, filament networks, … |
+| Shape conversion | *local* (nearest: Conversion, `operation_3434`) | vectorize, rasterize, mesh, smooth / simplify | labels to outlines and back, label to mesh, … |
+| Object feature extraction | `operation_Feature_extraction` | measure, count, assign | intensity, morphology, texture, colocalization⁴, neighbour distances, surface features, object counts⁴, spots per cell, … |
+| Classification | `operation_2990` | classify | object classifier, … |
+| Clustering | `operation___Clustering` | cluster | spot clusters, density, phenotype clusters, … |
+| Data analysis | *local* (nearest: Analysis, `operation_2945`) | normalize, aggregate, paint, … | normalization to controls, well summaries, hit calling, classes painted back into a label, … |
+| Validation | `operation___Validation` | score | focus, saturation, empty FOVs⁵, segmentation statistics, … |
+| Export | *local* (nearest: Conversion, `operation_3434`) | export | thumbnails, tables, meshes, … |
+
+Where EDAM files a task example elsewhere:
+
+1. Deconvolution: Image reconstruction (`operation_Image_reconstruction`).
+2. Projection and montage: Image projection (`operation_Projection`) and Montage (`operation_Montage`), both under Visualisation.
+3. Stitching: Image stitching (`operation_Image_stitching`), under Image reconstruction.
+4. Colocalization and object counts: Colocalisation analysis (`operation___Colocalisation_analysis`) and Object counting (`operation_Cell_counting`), siblings of Object feature extraction under Image analysis.
+5. Image-level checks such as focus, saturation and empty FOVs: Image validation (`operation___Image_validation`), a child of Validation.
+
+EDAM also places Filament tracing under Image segmentation and Spot detection under Image feature detection; they stay separate categories here because each has its own EDAM class.
+
+An operation can appear in several categories: *estimate* and *apply* in Image correction and Image registration, *detect* in Image segmentation, Spot detection and Object tracking, *link* in Object tracking and in Image reshaping when merging objects across FOVs.
 
 ## Compatibility
 
