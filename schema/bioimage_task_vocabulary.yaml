@@ -1,0 +1,232 @@
+id: https://example.org/bioimage-task-vocabulary
+name: bioimage_task_vocabulary
+title: Bioimage task vocabulary
+description: >-
+  Object types, roles, operations and categories for describing bioimage
+  analysis tasks. Concepts are SKOS concepts; mappings to EDAM-Bioimaging use
+  SKOS mapping properties.
+license: MIT
+version: 0.1.0
+
+# The namespace is a local placeholder. To publish, change the base IRI in
+# `btv` and in the four scheme prefixes below; nothing else needs to change.
+prefixes:
+  linkml: https://w3id.org/linkml/
+  btv: https://example.org/bioimage-task-vocabulary/
+  type: https://example.org/bioimage-task-vocabulary/type/
+  role: https://example.org/bioimage-task-vocabulary/role/
+  op: https://example.org/bioimage-task-vocabulary/operation/
+  cat: https://example.org/bioimage-task-vocabulary/category/
+  skos: http://www.w3.org/2004/02/skos/core#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  edam: http://edamontology.org/
+
+default_prefix: btv
+default_range: string
+imports:
+  - linkml:types
+
+classes:
+
+  Vocabulary:
+    tree_root: true
+    description: Container for the whole vocabulary. Each YAML file in vocabulary/ fills one slot.
+    slots: [edam_terms, object_types, roles, operations, categories]
+    slot_usage:
+      operations:
+        description: All operations. Inlined here; a category only refers to them by id.
+        inlined: true
+        inlined_as_list: true
+
+  Concept:
+    abstract: true
+    class_uri: skos:Concept
+    slots: [id, label, description]
+
+  EdamTerm:
+    description: An EDAM-Bioimaging class referenced by this vocabulary, with its label as of the EDAM version used.
+    slots: [id, label]
+
+  DataKind:
+    abstract: true
+    is_a: Concept
+    description: Anything a port can accept or produce, an object type or one of its subtypes.
+
+  ObjectType:
+    is_a: DataKind
+    description: A type of object an operation reads or writes.
+    slots: [subtypes, nf_bioimage_spec]
+
+  Subtype:
+    is_a: DataKind
+    description: A subtype of an object type, named only where it changes what an operation accepts.
+
+  Role:
+    is_a: Concept
+    description: What an input does in an operation, independent of its type.
+    slots: [role_examples]
+
+  RoleExample:
+    description: An example of a role, optionally the operation it is played in.
+    slots: [text, in_operation]
+
+  Operation:
+    is_a: Concept
+    description: A step characterized by the types and roles of the objects it reads and writes.
+    slots: [signatures]
+
+  Signature:
+    description: One input/output combination of an operation.
+    slots: [inputs, outputs, example, close_match, nf_bioimage_spec]
+
+  Port:
+    description: An input or output of a signature.
+    slots: [accepts, role, optional, qualifier]
+
+  Category:
+    is_a: Concept
+    description: A functional group of operations from the image analyst's point of view.
+    slots: [exact_match, broad_match, operations, more_operations, task_examples]
+    rules:
+      - description: A category maps to EDAM either exactly or, if local, to its nearest broader class.
+        preconditions:
+          slot_conditions:
+            exact_match:
+              value_presence: PRESENT
+        postconditions:
+          slot_conditions:
+            broad_match:
+              value_presence: ABSENT
+
+  TaskExample:
+    description: An example task in a category, with the EDAM class where EDAM files it elsewhere.
+    slots: [label, close_match, edam_note]
+
+slots:
+
+  # --- containers ---
+  edam_terms:
+    range: EdamTerm
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  object_types:
+    range: ObjectType
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  roles:
+    range: Role
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  operations:
+    description: Operations grouped in a category.
+    slot_uri: btv:hasOperation
+    range: Operation
+    multivalued: true
+  categories:
+    range: Category
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+
+  # --- concept metadata ---
+  id:
+    identifier: true
+    range: uriorcurie
+  label:
+    slot_uri: skos:prefLabel
+    required: true
+  description:
+    slot_uri: skos:definition
+
+  # --- object types ---
+  subtypes:
+    slot_uri: skos:narrower
+    range: Subtype
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  nf_bioimage_spec:
+    description: Matching nf-bioimage-spec names.
+    slot_uri: btv:nfBioimageSpec
+    multivalued: true
+
+  # --- roles ---
+  role_examples:
+    slot_uri: skos:example
+    range: RoleExample
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  text:
+    slot_uri: rdfs:label
+    required: true
+  in_operation:
+    slot_uri: btv:inOperation
+    range: Operation
+
+  # --- operations ---
+  signatures:
+    slot_uri: btv:signature
+    range: Signature
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    required: true
+  inputs:
+    slot_uri: btv:input
+    range: Port
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  outputs:
+    slot_uri: btv:output
+    range: Port
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+    required: true
+  accepts:
+    description: Alternative types or subtypes this port takes. Empty means any type.
+    slot_uri: btv:accepts
+    range: DataKind
+    multivalued: true
+  role:
+    description: The role of the port. Omitted for the subject.
+    slot_uri: btv:role
+    range: Role
+  optional:
+    slot_uri: btv:optional
+    range: boolean
+  qualifier:
+    description: Free-text granularity note, e.g. "per FOV".
+    slot_uri: btv:qualifier
+  example:
+    slot_uri: skos:example
+
+  # --- categories ---
+  exact_match:
+    slot_uri: skos:exactMatch
+    range: EdamTerm
+  broad_match:
+    description: For a local category, the nearest broader EDAM class.
+    slot_uri: skos:broadMatch
+    range: EdamTerm
+  close_match:
+    slot_uri: skos:closeMatch
+    range: EdamTerm
+  more_operations:
+    description: The operation list is open-ended.
+    slot_uri: btv:openOperationList
+    range: boolean
+  task_examples:
+    slot_uri: skos:example
+    range: TaskExample
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  edam_note:
+    description: Where the EDAM class sits, e.g. "under Visualisation".
+    slot_uri: skos:scopeNote

@@ -1,0 +1,15 @@
+# Object types
+
+Part of the [task classification](../task_classification.md) · **Object types** · [Roles](roles.md) · [Operations](operations.md) · [Categories](categories.md)
+
+The types of objects an [operation](operations.md) reads and writes.
+
+| Object | Content | Subtypes | nf-bioimage-spec aliases |
+|---|---|---|---|
+{% for t in data.object_types %}
+| {{ r.anchor(t) }}{{ t.label }} | {{ t.description }} | {% for s in t.subtypes or [] %}{{ s.label }}{% if s.description %} ({{ s.description }}){% endif %}{% if not loop.last %}, {% endif %}{% endfor %} | {{ r.codes(t.nf_bioimage_spec) }} |
+{% endfor %}
+
+A subtype is named only where it changes what an operation accepts.
+
+OME-Zarr has no adopted format for point clouds, vectors, meshes or graphs yet: one must be chosen before the first task that writes them.
