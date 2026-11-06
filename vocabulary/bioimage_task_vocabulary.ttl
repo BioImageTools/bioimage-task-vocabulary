@@ -1,3 +1,6 @@
+@prefix IAO: <http://purl.obolibrary.org/obo/IAO_> .
+@prefix NCIT: <http://purl.obolibrary.org/obo/NCIT_> .
+@prefix SIO: <http://semanticscience.org/resource/SIO_> .
 @prefix btv: <https://example.org/bioimage-task-vocabulary/> .
 @prefix cat: <https://example.org/bioimage-task-vocabulary/category/> .
 @prefix edam: <http://edamontology.org/> .
@@ -289,7 +292,12 @@ role:subject a skos:Concept,
 
 type:Graph-tracks a skos:Concept,
         btv:Subtype ;
-    skos:prefLabel "tracks" .
+    skos:closeMatch edam:data_Trajectory ;
+    skos:prefLabel "tracks" ;
+    btv:dataModelEquivalent [ a btv:ModelElement ;
+            rdfs:label "tracks" ;
+            rdfs:seeAlso <https://bioimage-archive.github.io/bia-mifa-models/AnnotationType/> ;
+            btv:dataModel "MIFA" ] .
 
 type:Graph-tracks_with_divisions a skos:Concept,
         btv:Subtype ;
@@ -299,56 +307,92 @@ type:Table-masking_ROI a skos:Concept,
         btv:Subtype ;
     skos:prefLabel "masking ROI" .
 
-edam:operation_2945 a btv:EdamTerm ;
+edam:data_Image a btv:Term ;
+    skos:prefLabel "Image" .
+
+edam:data_Roi a btv:Term ;
+    skos:prefLabel "Region of interest" .
+
+edam:data_Trajectory a btv:Term ;
+    skos:prefLabel "Object trajectory" .
+
+edam:operation_2945 a btv:Term ;
     skos:prefLabel "Analysis" .
 
-edam:operation_2990 a btv:EdamTerm ;
+edam:operation_2990 a btv:Term ;
     skos:prefLabel "Classification" .
 
-edam:operation_3096 a btv:EdamTerm ;
+edam:operation_3096 a btv:Term ;
     skos:prefLabel "Editing" .
 
-edam:operation_Image_processing a btv:EdamTerm ;
+edam:operation_Image_processing a btv:Term ;
     skos:prefLabel "Image processing" .
 
-edam:operation_Image_reconstruction a btv:EdamTerm ;
+edam:operation_Image_reconstruction a btv:Term ;
     skos:prefLabel "Image reconstruction" .
 
-edam:operation_Image_registration a btv:EdamTerm ;
+edam:operation_Image_registration a btv:Term ;
     skos:prefLabel "Image registration" .
 
-edam:operation_Montage a btv:EdamTerm ;
+edam:operation_Montage a btv:Term ;
     skos:prefLabel "Montage" .
 
-edam:operation_Morphological_operations a btv:EdamTerm ;
+edam:operation_Morphological_operations a btv:Term ;
     skos:prefLabel "Morphological operation" .
 
-edam:operation_Pixel_classification a btv:EdamTerm ;
+edam:operation_Pixel_classification a btv:Term ;
     skos:prefLabel "Pixel classification" .
 
-edam:operation_Skeletonization a btv:EdamTerm ;
+edam:operation_Skeletonization a btv:Term ;
     skos:prefLabel "Skeletonisation" .
 
-edam:operation_Watershed a btv:EdamTerm ;
+edam:operation_Watershed a btv:Term ;
     skos:prefLabel "Watershed segmentation" .
 
-edam:operation__R7MFwdgojfmkZ07yWbdcda0 a btv:EdamTerm ;
+edam:operation__R7MFwdgojfmkZ07yWbdcda0 a btv:Term ;
     skos:prefLabel "Image correction" .
 
-edam:operation__RyCFuPLOeGxpcGjYbWcWWD a btv:EdamTerm ;
+edam:operation__RyCFuPLOeGxpcGjYbWcWWD a btv:Term ;
     skos:prefLabel "Object classification" .
 
-edam:operation___Colocalisation_analysis a btv:EdamTerm ;
+edam:operation___Colocalisation_analysis a btv:Term ;
     skos:prefLabel "Colocalisation analysis" .
 
-edam:operation___Trajectory_analysis a btv:EdamTerm ;
+edam:operation___Trajectory_analysis a btv:Term ;
     skos:prefLabel "Trajectory analysis" .
 
-edam:operation___Validation a btv:EdamTerm ;
+edam:operation___Validation a btv:Term ;
     skos:prefLabel "Validation" .
 
-edam:operation_____Overlap_analysis a btv:EdamTerm ;
+edam:operation_____Overlap_analysis a btv:Term ;
     skos:prefLabel "Overlap analysis" .
+
+IAO:0000101 a btv:Term ;
+    skos:prefLabel "image" .
+
+IAO:0000306 a btv:Term ;
+    skos:prefLabel "table" .
+
+NCIT:C201530 a btv:Term ;
+    skos:prefLabel "Binary Mask" .
+
+SIO:000081 a btv:Term ;
+    skos:prefLabel "image" .
+
+SIO:000396 a btv:Term ;
+    skos:prefLabel "file" .
+
+SIO:000419 a btv:Term ;
+    skos:prefLabel "table" .
+
+SIO:000505 a btv:Term ;
+    skos:prefLabel "polygon" .
+
+SIO:000507 a btv:Term ;
+    skos:prefLabel "point" .
+
+SIO:000545 a btv:Term ;
+    skos:prefLabel "polyline" .
 
 op:aggregate a skos:Concept,
         btv:Operation ;
@@ -659,6 +703,8 @@ type:Label-skeleton a skos:Concept,
 
 type:Table a skos:Concept,
         btv:ObjectType ;
+    skos:closeMatch IAO:0000306,
+        SIO:000419 ;
     skos:definition "Rows of values under a header." ;
     skos:narrower type:Table-ROI,
         type:Table-condition,
@@ -666,51 +712,56 @@ type:Table a skos:Concept,
         type:Table-masking_ROI,
         type:Table-parameter ;
     skos:prefLabel "Table" ;
+    btv:dataModelEquivalent [ a btv:ModelElement ;
+            rdfs:label "table" ;
+            rdfs:seeAlso <https://spatialdata.scverse.org/en/stable/design_doc.html#table-table-of-annotations-for-regions> ;
+            btv:dataModel "SpatialData" ] ;
     btv:nfBioimageSpec "Scalar",
         "Tabular" .
 
 type:Table-ROI a skos:Concept,
         btv:Subtype ;
-    skos:prefLabel "ROI" .
+    skos:prefLabel "ROI" ;
+    skos:relatedMatch edam:data_Roi .
 
 type:Table-condition a skos:Concept,
         btv:Subtype ;
     skos:prefLabel "condition" .
 
-edam:operation_Cell_counting a btv:EdamTerm ;
+edam:operation_Cell_counting a btv:Term ;
     skos:prefLabel "Object counting" .
 
-edam:operation_Feature_extraction a btv:EdamTerm ;
+edam:operation_Feature_extraction a btv:Term ;
     skos:prefLabel "Object feature extraction" .
 
-edam:operation_Geometrical_transform a btv:EdamTerm ;
+edam:operation_Geometrical_transform a btv:Term ;
     skos:prefLabel "Geometrical transformation" .
 
-edam:operation_Image_enhancement a btv:EdamTerm ;
+edam:operation_Image_enhancement a btv:Term ;
     skos:prefLabel "Image enhancement" .
 
-edam:operation_Image_segmentation a btv:EdamTerm ;
+edam:operation_Image_segmentation a btv:Term ;
     skos:prefLabel "Image segmentation" .
 
-edam:operation_Image_stitching a btv:EdamTerm ;
+edam:operation_Image_stitching a btv:Term ;
     skos:prefLabel "Image stitching" .
 
-edam:operation_Image_tracking a btv:EdamTerm ;
+edam:operation_Image_tracking a btv:Term ;
     skos:prefLabel "Object tracking" .
 
-edam:operation_Projection a btv:EdamTerm ;
+edam:operation_Projection a btv:Term ;
     skos:prefLabel "Image projection" .
 
-edam:operation_Spot_extraction a btv:EdamTerm ;
+edam:operation_Spot_extraction a btv:Term ;
     skos:prefLabel "Spot detection" .
 
-edam:operation__R9Qf06vxvFj2UbAk7pW3IMG a btv:EdamTerm ;
+edam:operation__R9Qf06vxvFj2UbAk7pW3IMG a btv:Term ;
     skos:prefLabel "Filament tracing" .
 
-edam:operation__Rhb4iyLUQWY4HnhPpuqNNI a btv:EdamTerm ;
+edam:operation__Rhb4iyLUQWY4HnhPpuqNNI a btv:Term ;
     skos:prefLabel "Image crop" .
 
-edam:operation___Clustering a btv:EdamTerm ;
+edam:operation___Clustering a btv:Term ;
     skos:prefLabel "Clustering" .
 
 op:assign a skos:Concept,
@@ -845,7 +896,21 @@ type:Label-class_map a skos:Concept,
 type:Vector a skos:Concept,
         btv:ObjectType ;
     skos:definition "2D polygons and lines outlining objects." ;
+    skos:narrowMatch SIO:000505,
+        SIO:000545 ;
     skos:prefLabel "Vector" ;
+    btv:dataModelEquivalent [ a btv:ModelElement ;
+            rdfs:label "shapes" ;
+            rdfs:seeAlso <https://spatialdata.scverse.org/en/stable/design_doc.html#shapes> ;
+            btv:dataModel "SpatialData" ],
+        [ a btv:ModelElement ;
+            rdfs:label "bounding_boxes" ;
+            rdfs:seeAlso <https://bioimage-archive.github.io/bia-mifa-models/AnnotationType/> ;
+            btv:dataModel "MIFA" ],
+        [ a btv:ModelElement ;
+            rdfs:label "geometrical_annotations" ;
+            rdfs:seeAlso <https://bioimage-archive.github.io/bia-mifa-models/AnnotationType/> ;
+            btv:dataModel "MIFA" ] ;
     btv:nfBioimageSpec "Vector" .
 
 op:apply a skos:Concept,
@@ -946,6 +1011,10 @@ type:Graph a skos:Concept,
         type:Graph-tracks_with_divisions,
         type:Graph-tree ;
     skos:prefLabel "Graph" ;
+    btv:dataModelEquivalent [ a btv:ModelElement ;
+            rdfs:label "graphs" ;
+            rdfs:seeAlso <https://bioimage-archive.github.io/bia-mifa-models/AnnotationType/> ;
+            btv:dataModel "MIFA" ] ;
     btv:nfBioimageSpec "SWC",
         "Tracks",
         "TracksWithDivision" .
@@ -954,15 +1023,19 @@ type:Table-parameter a skos:Concept,
         btv:Subtype ;
     skos:prefLabel "parameter" .
 
-edam:operation___Image_validation a btv:EdamTerm ;
+edam:operation___Image_validation a btv:Term ;
     skos:prefLabel "Image validation" .
 
 type:Mesh a skos:Concept,
         btv:ObjectType ;
     skos:definition "Vertices and faces of an object's surface." ;
-    skos:prefLabel "Mesh" .
+    skos:prefLabel "Mesh" ;
+    btv:dataModelEquivalent [ a btv:ModelElement ;
+            rdfs:label "geometrical_annotations" ;
+            rdfs:seeAlso <https://bioimage-archive.github.io/bia-mifa-models/AnnotationType/> ;
+            btv:dataModel "MIFA" ] .
 
-edam:operation_3434 a btv:EdamTerm ;
+edam:operation_3434 a btv:Term ;
     skos:prefLabel "Conversion" .
 
 role:parameter a skos:Concept,
@@ -986,16 +1059,26 @@ role:reference a skos:Concept,
 
 type:Files a skos:Concept,
         btv:ObjectType ;
+    skos:closeMatch SIO:000396 ;
     skos:definition "Anything outside OME-Zarr: raw acquisition files, collected metadata, exports." ;
     skos:prefLabel "Files" .
 
 type:Label a skos:Concept,
         btv:ObjectType ;
     skos:definition "Integers on an image grid." ;
+    skos:narrowMatch NCIT:C201530 ;
     skos:narrower type:Label-class_map,
         type:Label-instance,
         type:Label-skeleton ;
     skos:prefLabel "Label" ;
+    btv:dataModelEquivalent [ a btv:ModelElement ;
+            rdfs:label "labels" ;
+            rdfs:seeAlso <https://spatialdata.scverse.org/en/stable/design_doc.html#labels-pixel-mask> ;
+            btv:dataModel "SpatialData" ],
+        [ a btv:ModelElement ;
+            rdfs:label "segmentation_mask" ;
+            rdfs:seeAlso <https://bioimage-archive.github.io/bia-mifa-models/AnnotationType/> ;
+            btv:dataModel "MIFA" ] ;
     btv:nfBioimageSpec "ClassMask",
         "LabelMask",
         "SkeletonMask" .
@@ -1004,6 +1087,15 @@ type:PointCloud a skos:Concept,
         btv:ObjectType ;
     skos:definition "Points with attributes." ;
     skos:prefLabel "Point cloud" ;
+    skos:relatedMatch SIO:000507 ;
+    btv:dataModelEquivalent [ a btv:ModelElement ;
+            rdfs:label "points" ;
+            rdfs:seeAlso <https://spatialdata.scverse.org/en/stable/design_doc.html#points> ;
+            btv:dataModel "SpatialData" ],
+        [ a btv:ModelElement ;
+            rdfs:label "point_annotations" ;
+            rdfs:seeAlso <https://bioimage-archive.github.io/bia-mifa-models/AnnotationType/> ;
+            btv:dataModel "MIFA" ] ;
     btv:nfBioimageSpec "Points" .
 
 type:Label-instance a skos:Concept,
@@ -1013,14 +1105,29 @@ type:Label-instance a skos:Concept,
 
 type:Table-feature a skos:Concept,
         btv:Subtype ;
-    skos:prefLabel "feature" .
+    skos:prefLabel "feature" ;
+    btv:dataModelEquivalent [ a btv:ModelElement ;
+            rdfs:label "counts" ;
+            rdfs:seeAlso <https://bioimage-archive.github.io/bia-mifa-models/AnnotationType/> ;
+            btv:dataModel "MIFA" ],
+        [ a btv:ModelElement ;
+            rdfs:label "derived_annotations" ;
+            rdfs:seeAlso <https://bioimage-archive.github.io/bia-mifa-models/AnnotationType/> ;
+            btv:dataModel "MIFA" ] .
 
 type:Image a skos:Concept,
         btv:ObjectType ;
+    skos:closeMatch IAO:0000101,
+        SIO:000081 ;
     skos:definition "Pixel intensities, one or more channels." ;
+    skos:exactMatch edam:data_Image ;
     skos:narrower type:Image-intensity,
         type:Image-probability ;
     skos:prefLabel "Image" ;
+    btv:dataModelEquivalent [ a btv:ModelElement ;
+            rdfs:label "images" ;
+            rdfs:seeAlso <https://spatialdata.scverse.org/en/stable/design_doc.html#images> ;
+            btv:dataModel "SpatialData" ] ;
     btv:nfBioimageSpec "Image" .
 
 [] a btv:Vocabulary ;
@@ -1040,37 +1147,6 @@ type:Image a skos:Concept,
         cat:ShapeConversion,
         cat:SpotDetection,
         cat:Validation ;
-    btv:edam_terms edam:operation_2945,
-        edam:operation_2990,
-        edam:operation_3096,
-        edam:operation_3434,
-        edam:operation_Cell_counting,
-        edam:operation_Feature_extraction,
-        edam:operation_Geometrical_transform,
-        edam:operation_Image_enhancement,
-        edam:operation_Image_processing,
-        edam:operation_Image_reconstruction,
-        edam:operation_Image_registration,
-        edam:operation_Image_segmentation,
-        edam:operation_Image_stitching,
-        edam:operation_Image_tracking,
-        edam:operation_Montage,
-        edam:operation_Morphological_operations,
-        edam:operation_Pixel_classification,
-        edam:operation_Projection,
-        edam:operation_Skeletonization,
-        edam:operation_Spot_extraction,
-        edam:operation_Watershed,
-        edam:operation__R7MFwdgojfmkZ07yWbdcda0,
-        edam:operation__R9Qf06vxvFj2UbAk7pW3IMG,
-        edam:operation__Rhb4iyLUQWY4HnhPpuqNNI,
-        edam:operation__RyCFuPLOeGxpcGjYbWcWWD,
-        edam:operation___Clustering,
-        edam:operation___Colocalisation_analysis,
-        edam:operation___Image_validation,
-        edam:operation___Trajectory_analysis,
-        edam:operation___Validation,
-        edam:operation_____Overlap_analysis ;
     btv:hasOperation op:aggregate,
         op:apply,
         op:assign,
@@ -1116,5 +1192,48 @@ type:Image a skos:Concept,
         role:mask,
         role:parameter,
         role:reference,
-        role:subject .
+        role:subject ;
+    btv:terms edam:data_Image,
+        edam:data_Roi,
+        edam:data_Trajectory,
+        edam:operation_2945,
+        edam:operation_2990,
+        edam:operation_3096,
+        edam:operation_3434,
+        edam:operation_Cell_counting,
+        edam:operation_Feature_extraction,
+        edam:operation_Geometrical_transform,
+        edam:operation_Image_enhancement,
+        edam:operation_Image_processing,
+        edam:operation_Image_reconstruction,
+        edam:operation_Image_registration,
+        edam:operation_Image_segmentation,
+        edam:operation_Image_stitching,
+        edam:operation_Image_tracking,
+        edam:operation_Montage,
+        edam:operation_Morphological_operations,
+        edam:operation_Pixel_classification,
+        edam:operation_Projection,
+        edam:operation_Skeletonization,
+        edam:operation_Spot_extraction,
+        edam:operation_Watershed,
+        edam:operation__R7MFwdgojfmkZ07yWbdcda0,
+        edam:operation__R9Qf06vxvFj2UbAk7pW3IMG,
+        edam:operation__Rhb4iyLUQWY4HnhPpuqNNI,
+        edam:operation__RyCFuPLOeGxpcGjYbWcWWD,
+        edam:operation___Clustering,
+        edam:operation___Colocalisation_analysis,
+        edam:operation___Image_validation,
+        edam:operation___Trajectory_analysis,
+        edam:operation___Validation,
+        edam:operation_____Overlap_analysis,
+        IAO:0000101,
+        IAO:0000306,
+        NCIT:C201530,
+        SIO:000081,
+        SIO:000396,
+        SIO:000419,
+        SIO:000505,
+        SIO:000507,
+        SIO:000545 .
 

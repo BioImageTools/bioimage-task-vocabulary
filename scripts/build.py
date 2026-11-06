@@ -32,7 +32,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SCHEMA = ROOT / "schema" / "bioimage_task_vocabulary.yaml"
 VOCAB = ROOT / "vocabulary"
 TEMPLATES = ROOT / "templates"
-SOURCES = ["edam_terms", "object_types", "roles", "operations", "categories"]
+SOURCES = ["terms", "object_types", "roles", "operations", "categories"]
 PAGES = ["object_types", "roles", "operations", "categories"]
 TTL = VOCAB / "bioimage_task_vocabulary.ttl"
 BIOPORTAL = "https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid="
@@ -118,7 +118,7 @@ def check_edam(data: dict, source: str) -> None:
         if c.get(about) and label is not None and c.find("owl:deprecated", ns) is None:
             labels[c.get(about).rsplit("/", 1)[-1]] = label.text
     errors = []
-    for term in data["edam_terms"]:
+    for term in (t for t in data["terms"] if t["id"].startswith("edam:")):
         local = term["id"].split(":", 1)[1]
         if local not in labels:
             errors.append(f"{term['id']} not found (or deprecated) in {source}")
@@ -153,13 +153,14 @@ def slug(text: str) -> str:
 
 
 class Renderer:
-    """Helpers available in templates. Records EDAM terms used, for the link definitions."""
+    """Helpers available in templates. Records the ontology terms used, for the link definitions."""
 
-    def __init__(self, data: dict):
+    def __init__(self, data: dict, prefixes: dict[str, str]):
         self.data = data
+        self.prefixes = prefixes
         self.by_id: dict[str, dict] = {}
         self.parent: dict[str, dict] = {}
-        for t in data["edam_terms"]:
+        for t in data["terms"]:
             self.by_id[t["id"]] = t
         for t in data["object_types"]:
             self.by_id[t["id"]] = t
@@ -180,24 +181,52 @@ class Renderer:
         text = f"*{label}*" if italic else label
         return f"[{text}]({page}#{slug(label)})"
 
+    @staticmethod
+    def ref_key(term_id: str) -> str:
+        """Reference-link key: the bare EDAM ID for EDAM terms, the CURIE for others."""
+        return term_id.split(":", 1)[1] if term_id.startswith("edam:") else term_id
+
     def edam(self, term_id: str, text: str | None = None) -> str:
+        """Link to an ontology term (EDAM or other), labelled with its label unless text is given."""
         if term_id not in self.edam_used:
             self.edam_used.append(term_id)
-        key = term_id.split(":", 1)[1]
-        return f"[{text or self.by_id[term_id]['label']}][{key}]"
+        return f"[{text or self.by_id[term_id]['label']}][{self.ref_key(term_id)}]"
+
+    def term(self, term_id: str) -> str:
+        """Link labelled with the term's label and its ontology, e.g. "table (IAO)"."""
+        prefix = term_id.split(":", 1)[0]
+        source = "EDAM" if prefix == "edam" else prefix
+        return self.edam(term_id, f"{self.by_id[term_id]['label']} ({source})")
 
     def edam_id(self, term_id: str) -> str:
         key = term_id.split(":", 1)[1]
         return self.edam(term_id, f"`{key}`")
 
     def edam_definitions(self) -> str:
-        lines = ["<!-- EDAM-Bioimaging links. Key = EDAM ID; the URL is the BioPortal page for "
-                 "http://edamontology.org/<ID>. -->"]
+        lines = ["<!-- Ontology term links. EDAM: key = EDAM ID, URL = BioPortal page for "
+                 "http://edamontology.org/<ID>. Others: key = CURIE, URL = the term IRI. -->"]
         for term_id in self.edam_used:
-            key = term_id.split(":", 1)[1]
-            iri = urllib.parse.quote(f"http://edamontology.org/{key}", safe="")
-            lines.append(f"[{key}]: {BIOPORTAL}{iri}")
+            prefix, local = term_id.split(":", 1)
+            iri = self.prefixes[prefix] + local
+            url = BIOPORTAL + urllib.parse.quote(iri, safe="") if prefix == "edam" else iri
+            lines.append(f"[{self.ref_key(term_id)}]: {url}")
         return "\n".join(lines) + "\n"
+
+    # -- object type mappings
+    MATCHES = [("exact_match", "exact"), ("close_match", "close"), ("broad_match", "broad"),
+               ("narrow_match", "narrow"), ("related_match", "related")]
+
+    def mappings(self, concept: dict) -> str:
+        parts = []
+        for slot, word in self.MATCHES:
+            if concept.get(slot):
+                parts.append(f"*{word}*: " + ", ".join(self.term(t) for t in concept[slot]))
+        return "; ".join(parts)
+
+    @staticmethod
+    def models(concept: dict) -> str:
+        return ", ".join(f"{m['model']} [{m['element']}]({m['url']})"
+                         for m in concept.get("data_model_equivalents") or [])
 
     # -- operations
     def kind(self, kind_id: str) -> str:
@@ -262,12 +291,13 @@ class Renderer:
         return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " and " + items[-1]
 
 
-def render_pages(data: dict) -> dict[Path, str]:
+def render_pages(data: dict, sv: SchemaView) -> dict[Path, str]:
+    prefixes = {k: v.prefix_reference for k, v in sv.schema.prefixes.items()}
     env = Environment(loader=FileSystemLoader(TEMPLATES),
                       keep_trailing_newline=True, trim_blocks=True, lstrip_blocks=True)
     out = {}
     for page in PAGES:
-        r = Renderer(data)
+        r = Renderer(data, prefixes)
         body = env.get_template(f"{page}.md.j2").render(data=data, r=r)
         header = (f"<!-- GENERATED by scripts/build.py from vocabulary/{page}.yaml (and the other YAML files in vocabulary/) and "
                   f"templates/{page}.md.j2. Do not edit this file; edit those and rebuild. -->\n\n")
@@ -295,7 +325,7 @@ def main() -> None:
     if args.edam_owl:
         check_edam(data, args.edam_owl)
 
-    outputs = render_pages(data)
+    outputs = render_pages(data, sv)
     outputs[TTL] = to_turtle(data, sv)
 
     stale = [p for p, text in outputs.items() if not p.exists() or p.read_text() != text]

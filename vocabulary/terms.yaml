@@ -1,9 +1,13 @@
-# EDAM-Bioimaging classes referenced by this vocabulary, with their labels in
-# release alpha06 (whose operation tree matches the current development version).
-# Check against the ontology with:
+# External ontology terms referenced by this vocabulary, with their labels in
+# the ontology version used. Other files refer to them by id.
+#
+# EDAM-Bioimaging (edam:): release alpha06, whose operation tree matches the
+# current development version. Check ids and labels with:
 #   python scripts/build.py --edam-owl <path or URL to EDAM-bioimaging .owl>
+# IAO, SIO, NCIt: labels as shown by the EBI Ontology Lookup Service (OLS).
 
-edam_terms:
+terms:
+  # EDAM-Bioimaging operations
   - {id: edam:operation_2945, label: Analysis}
   - {id: edam:operation_2990, label: Classification}
   - {id: edam:operation_3096, label: Editing}
@@ -35,3 +39,23 @@ edam_terms:
   - {id: edam:operation___Trajectory_analysis, label: Trajectory analysis}
   - {id: edam:operation___Validation, label: Validation}
   - {id: edam:operation_____Overlap_analysis, label: Overlap analysis}
+
+  # EDAM-Bioimaging data
+  - {id: edam:data_Image, label: Image}
+  - {id: edam:data_Roi, label: Region of interest}
+  - {id: edam:data_Trajectory, label: Object trajectory}
+
+  # Information Artifact Ontology
+  - {id: IAO:0000101, label: image}
+  - {id: IAO:0000306, label: table}
+
+  # Semanticscience Integrated Ontology
+  - {id: SIO:000081, label: image}
+  - {id: SIO:000396, label: file}
+  - {id: SIO:000419, label: table}
+  - {id: SIO:000505, label: polygon}
+  - {id: SIO:000507, label: point}
+  - {id: SIO:000545, label: polyline}
+
+  # NCI Thesaurus
+  - {id: NCIT:C201530, label: Binary Mask}

@@ -13,3 +13,19 @@ The types of objects an [operation](operations.md) reads and writes.
 A subtype is named only where it changes what an operation accepts.
 
 OME-Zarr has no adopted format for point clouds, vectors, meshes or graphs yet: one must be chosen before the first task that writes them.
+
+## Mappings
+
+No single ontology describes these types; only Image is well covered. Ontology terms are mapped with SKOS: *exact* (same concept), *close* (interchangeable in most uses), *narrow* (the external term is narrower, e.g. a binary mask is one kind of Label) and *related* (e.g. a point and a point cloud). Data models that are not ontologies, [SpatialData](https://spatialdata.scverse.org/en/stable/design_doc.html) and the BioImage Archive's [MIFA annotation types](https://bioimage-archive.github.io/bia-mifa-models/AnnotationType/), are linked by element name.
+
+| Object | Ontology terms | Data models |
+|---|---|---|
+{% for t in data.object_types %}
+{% for k in [t] + (t.subtypes or []) %}
+{% if r.mappings(k) or k.data_model_equivalents %}
+| {{ r.kind(k.id) }} | {{ r.mappings(k) }} | {{ r.models(k) }} |
+{% endif %}
+{% endfor %}
+{% endfor %}
+
+Label, Mesh, Point cloud and Graph (trees, skeletons) have no ontology term of their own. MIFA's annotation types are not mapped to an ontology either.

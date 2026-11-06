@@ -56,7 +56,7 @@ The EDAM class column gives the closest [EDAM-Bioimaging](https://bioportal.bioo
 
 The nf-bioimage-spec column gives the matching category of nf-bioimage-spec, whose categories 3–11 come from the [NEUBIAS / BIAFLOWS problem classes](https://neubias-wg5.github.io/problem_class_ground_truth.html). `ObjTrk` is *detect* and *link* together.
 
-<!-- EDAM-Bioimaging links. Key = EDAM ID; the URL is the BioPortal page for http://edamontology.org/<ID>. -->
+<!-- Ontology term links. EDAM: key = EDAM ID, URL = BioPortal page for http://edamontology.org/<ID>. Others: key = CURIE, URL = the term IRI. -->
 [operation_3096]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_3096
 [operation_3434]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_3434
 [operation_Image_enhancement]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_Image_enhancement

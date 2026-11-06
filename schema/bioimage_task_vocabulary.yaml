@@ -20,6 +20,9 @@ prefixes:
   skos: http://www.w3.org/2004/02/skos/core#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
   edam: http://edamontology.org/
+  IAO: http://purl.obolibrary.org/obo/IAO_
+  NCIT: http://purl.obolibrary.org/obo/NCIT_
+  SIO: http://semanticscience.org/resource/SIO_
 
 default_prefix: btv
 default_range: string
@@ -31,7 +34,7 @@ classes:
   Vocabulary:
     tree_root: true
     description: Container for the whole vocabulary. Each YAML file in vocabulary/ fills one slot.
-    slots: [edam_terms, object_types, roles, operations, categories]
+    slots: [terms, object_types, roles, operations, categories]
     slot_usage:
       operations:
         description: All operations. Inlined here; a category only refers to them by id.
@@ -43,14 +46,23 @@ classes:
     class_uri: skos:Concept
     slots: [id, label, description]
 
-  EdamTerm:
-    description: An EDAM-Bioimaging class referenced by this vocabulary, with its label as of the EDAM version used.
+  Term:
+    description: >-
+      An external ontology term this vocabulary maps to (EDAM-Bioimaging, IAO, SIO, NCIt),
+      with its label in the ontology version used.
     slots: [id, label]
 
   DataKind:
     abstract: true
     is_a: Concept
     description: Anything a port can accept or produce, an object type or one of its subtypes.
+    slots: [exact_match, close_match, broad_match, narrow_match, related_match, data_model_equivalents]
+    slot_usage:
+      exact_match: {multivalued: true}
+      close_match: {multivalued: true}
+      broad_match: {multivalued: true}
+      narrow_match: {multivalued: true}
+      related_match: {multivalued: true}
 
   ObjectType:
     is_a: DataKind
@@ -98,6 +110,12 @@ classes:
             broad_match:
               value_presence: ABSENT
 
+  ModelElement:
+    description: >-
+      The equivalent element in a data model that is not an ontology (e.g. SpatialData, MIFA),
+      identified by name and documentation URL.
+    slots: [model, element, url]
+
   TaskExample:
     description: An example task in a category, with the EDAM class where EDAM files it elsewhere.
     slots: [label, close_match, edam_note]
@@ -105,8 +123,8 @@ classes:
 slots:
 
   # --- containers ---
-  edam_terms:
-    range: EdamTerm
+  terms:
+    range: Term
     multivalued: true
     inlined: true
     inlined_as_list: true
@@ -209,14 +227,14 @@ slots:
   # --- categories ---
   exact_match:
     slot_uri: skos:exactMatch
-    range: EdamTerm
+    range: Term
   broad_match:
-    description: For a local category, the nearest broader EDAM class.
+    description: A broader external term. For a local category, the nearest broader EDAM class.
     slot_uri: skos:broadMatch
-    range: EdamTerm
+    range: Term
   close_match:
     slot_uri: skos:closeMatch
-    range: EdamTerm
+    range: Term
   more_operations:
     description: The operation list is open-ended.
     slot_uri: btv:openOperationList
@@ -227,6 +245,30 @@ slots:
     multivalued: true
     inlined: true
     inlined_as_list: true
+  narrow_match:
+    slot_uri: skos:narrowMatch
+    range: Term
+  related_match:
+    slot_uri: skos:relatedMatch
+    range: Term
+  data_model_equivalents:
+    slot_uri: btv:dataModelEquivalent
+    range: ModelElement
+    multivalued: true
+    inlined: true
+    inlined_as_list: true
+  model:
+    description: Name of the data model, e.g. SpatialData.
+    slot_uri: btv:dataModel
+    required: true
+  element:
+    description: Name of the element in that model, e.g. labels.
+    slot_uri: rdfs:label
+    required: true
+  url:
+    slot_uri: rdfs:seeAlso
+    range: uri
+    required: true
   edam_note:
     description: Where the EDAM class sits, e.g. "under Visualisation".
     slot_uri: skos:scopeNote

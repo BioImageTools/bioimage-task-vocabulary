@@ -43,7 +43,7 @@ EDAM also places Filament tracing under Image segmentation and Spot detection un
 
 An operation can appear in several categories: [*estimate*](operations.md#estimate) and [*apply*](operations.md#apply) in Image correction and Image registration, [*detect*](operations.md#detect) in Image segmentation, Spot detection and Object tracking, [*link*](operations.md#link) in Object tracking and in Image reshaping when merging objects across FOVs.
 
-<!-- EDAM-Bioimaging links. Key = EDAM ID; the URL is the BioPortal page for http://edamontology.org/<ID>. -->
+<!-- Ontology term links. EDAM: key = EDAM ID, URL = BioPortal page for http://edamontology.org/<ID>. Others: key = CURIE, URL = the term IRI. -->
 [operation_3434]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_3434
 [operation__R7MFwdgojfmkZ07yWbdcda0]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation__R7MFwdgojfmkZ07yWbdcda0
 [operation_Image_enhancement]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2Foperation_Image_enhancement

@@ -15,7 +15,7 @@ The overview is [task_classification.md](task_classification.md), and each table
 
 ## RDF
 
-The vocabulary is modelled in [LinkML](https://linkml.io) and published as RDF in [vocabulary/bioimage_task_vocabulary.ttl](vocabulary/bioimage_task_vocabulary.ttl). Every type, subtype, role, operation and category is a `skos:Concept`. Mappings to EDAM-Bioimaging use `skos:exactMatch` (a category named after an EDAM class), `skos:broadMatch` (the nearest broader EDAM class of a local category) and `skos:closeMatch` (operations and task examples). I/O signatures use `btv:signature`, `btv:input`, `btv:output`, `btv:accepts` and `btv:role`.
+The vocabulary is modelled in [LinkML](https://linkml.io) and published as RDF in [vocabulary/bioimage_task_vocabulary.ttl](vocabulary/bioimage_task_vocabulary.ttl). Every type, subtype, role, operation and category is a `skos:Concept`. Mappings to EDAM-Bioimaging use `skos:exactMatch` (a category named after an EDAM class), `skos:broadMatch` (the nearest broader EDAM class of a local category) and `skos:closeMatch` (operations and task examples). I/O signatures use `btv:signature`, `btv:input`, `btv:output`, `btv:accepts` and `btv:role`. Object types map to EDAM-Bioimaging, IAO, SIO and NCIt terms with `skos:exactMatch`, `skos:closeMatch`, `skos:narrowMatch` and `skos:relatedMatch`. Their equivalents in SpatialData and the BioImage Archive's MIFA annotation types are linked with `btv:dataModelEquivalent`, because those data models have no IRIs.
 
 The namespace is a local placeholder, `https://example.org/bioimage-task-vocabulary/`. It is declared once, in the schema's `prefixes`.
 
@@ -29,7 +29,7 @@ The YAML files are the source of truth. The Markdown tables and the Turtle file 
 |---|---|
 | a type, role, operation or category | `vocabulary/<table>.yaml` |
 | prose around a table | `templates/<table>.md.j2` |
-| an EDAM ID or label | `vocabulary/edam_terms.yaml` |
+| an EDAM or other ontology ID or label | `vocabulary/terms.yaml` |
 | the model itself (classes, slots, RDF properties) | [schema/bioimage_task_vocabulary.yaml](schema/bioimage_task_vocabulary.yaml) |
 
 Then rebuild:

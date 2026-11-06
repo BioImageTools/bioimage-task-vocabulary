@@ -5,7 +5,7 @@
 #                   subtypes (ids from object_types.yaml; empty = any type),
 #                   and may have a `role` (roles.yaml; omit for the subject),
 #                   `optional: true` and a free-text `qualifier`.
-#   close_match:    closest EDAM class (edam_terms.yaml), if any.
+#   close_match:    closest EDAM class (terms.yaml), if any.
 #   nf_bioimage_spec: matching nf-bioimage-spec category names.
 
 operations:
