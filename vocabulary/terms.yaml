@@ -1,0 +1,61 @@
+# External ontology terms referenced by this vocabulary, with their labels in
+# the ontology version used. Other files refer to them by id.
+#
+# EDAM-Bioimaging (edam:): release alpha06, whose operation tree matches the
+# current development version. Check ids and labels with:
+#   python scripts/build.py --edam-owl <path or URL to EDAM-bioimaging .owl>
+# IAO, SIO, NCIt: labels as shown by the EBI Ontology Lookup Service (OLS).
+
+terms:
+  # EDAM-Bioimaging operations
+  - {id: edam:operation_2945, label: Analysis}
+  - {id: edam:operation_2990, label: Classification}
+  - {id: edam:operation_3096, label: Editing}
+  - {id: edam:operation_3434, label: Conversion}
+  - {id: edam:operation_Cell_counting, label: Object counting}
+  - {id: edam:operation_Feature_extraction, label: Object feature extraction}
+  - {id: edam:operation_Geometrical_transform, label: Geometrical transformation}
+  - {id: edam:operation_Image_enhancement, label: Image enhancement}
+  - {id: edam:operation_Image_processing, label: Image processing}
+  - {id: edam:operation_Image_reconstruction, label: Image reconstruction}
+  - {id: edam:operation_Image_registration, label: Image registration}
+  - {id: edam:operation_Image_segmentation, label: Image segmentation}
+  - {id: edam:operation_Image_stitching, label: Image stitching}
+  - {id: edam:operation_Image_tracking, label: Object tracking}
+  - {id: edam:operation_Montage, label: Montage}
+  - {id: edam:operation_Morphological_operations, label: Morphological operation}
+  - {id: edam:operation_Pixel_classification, label: Pixel classification}
+  - {id: edam:operation_Projection, label: Image projection}
+  - {id: edam:operation_Skeletonization, label: Skeletonisation}
+  - {id: edam:operation_Spot_extraction, label: Spot detection}
+  - {id: edam:operation_Watershed, label: Watershed segmentation}
+  - {id: edam:operation__R7MFwdgojfmkZ07yWbdcda0, label: Image correction}
+  - {id: edam:operation__R9Qf06vxvFj2UbAk7pW3IMG, label: Filament tracing}
+  - {id: edam:operation__Rhb4iyLUQWY4HnhPpuqNNI, label: Image crop}
+  - {id: edam:operation__RyCFuPLOeGxpcGjYbWcWWD, label: Object classification}
+  - {id: edam:operation___Clustering, label: Clustering}
+  - {id: edam:operation___Colocalisation_analysis, label: Colocalisation analysis}
+  - {id: edam:operation___Image_validation, label: Image validation}
+  - {id: edam:operation___Trajectory_analysis, label: Trajectory analysis}
+  - {id: edam:operation___Validation, label: Validation}
+  - {id: edam:operation_____Overlap_analysis, label: Overlap analysis}
+
+  # EDAM-Bioimaging data
+  - {id: edam:data_Image, label: Image}
+  - {id: edam:data_Roi, label: Region of interest}
+  - {id: edam:data_Trajectory, label: Object trajectory}
+
+  # Information Artifact Ontology
+  - {id: IAO:0000101, label: image}
+  - {id: IAO:0000306, label: table}
+
+  # Semanticscience Integrated Ontology
+  - {id: SIO:000081, label: image}
+  - {id: SIO:000396, label: file}
+  - {id: SIO:000419, label: table}
+  - {id: SIO:000505, label: polygon}
+  - {id: SIO:000507, label: point}
+  - {id: SIO:000545, label: polyline}
+
+  # NCI Thesaurus
+  - {id: NCIT:C201530, label: Binary Mask}
