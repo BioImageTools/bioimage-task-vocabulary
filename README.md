@@ -40,7 +40,7 @@ python -m venv .venv && .venv/bin/pip install -r requirements.txt   # once
 .venv/bin/python scripts/query.py queries/next_operations.rq
 ```
 
-`build.py` validates the YAML against the schema and checks that every id is unique and every reference points to an existing id of the right class. It then writes the Markdown and Turtle. With `--edam-owl <file or URL>` it also checks every EDAM ID and label against the ontology. `--check` writes nothing and fails if a generated file is out of date, so it can run in CI.
+`build.py` validates the YAML against the schema and checks that every id is unique and every reference points to an existing id of the right class. It then writes the Markdown and Turtle. With `--edam-owl <file or URL>` it also checks every EDAM ID and label against the ontology. `--check` writes nothing and fails if a generated file is out of date. The [CI workflow](.github/workflows/check.yml) runs it, and the SPARQL query, on every push to `main` and every pull request.
 
 In the generated Markdown, table rows carry anchors such as `operations.md#detect`, and EDAM IDs link to BioPortal.
 

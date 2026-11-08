@@ -1,0 +1,25 @@
+name: Check vocabulary
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      # Validate the YAML sources and fail if the generated Markdown or Turtle is stale.
+      - run: python scripts/build.py --check
+
+      # Make sure the Turtle parses and the SPARQL query runs.
+      - run: python scripts/query.py queries/next_operations.rq
