@@ -735,7 +735,7 @@ edam:operation_Feature_extraction a btv:Term ;
     skos:prefLabel "Object feature extraction" .
 
 edam:operation_Geometrical_transform a btv:Term ;
-    skos:prefLabel "Geometrical transformation" .
+    skos:prefLabel "Geometric transformation" .
 
 edam:operation_Image_enhancement a btv:Term ;
     skos:prefLabel "Image enhancement" .

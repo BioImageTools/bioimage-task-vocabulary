@@ -21,7 +21,7 @@ An operation is characterized by the [types](object_types.md) and [roles](roles.
 | | Label → Label | 3D label to 2D | | |
 | <a id="rearrange"></a>*rearrange* | Image → Image | stitch, move FOVs back to their positions | [Image stitching][operation_Image_stitching] | `Stitch` |
 | <a id="crop"></a>*crop* | Image [+ ROI Table (parameter)] → Image | crop to ROI | [Image crop][operation__Rhb4iyLUQWY4HnhPpuqNNI] | |
-| <a id="rescale"></a>*rescale* | Image → Image | bin, upscale | [Geometrical transformation][operation_Geometrical_transform] | |
+| <a id="rescale"></a>*rescale* | Image → Image | bin, upscale | [Geometric transformation][operation_Geometrical_transform] | |
 | | Label → Label | | | |
 | <a id="predict"></a>*predict* | Image → probability Image or class map Label | pixel classifier, semantic segmentation | [Pixel classification][operation_Pixel_classification] | `PixCla` |
 | <a id="detect"></a>*detect* | Image [+ Label (mask)] → instance Label | thresholding, superpixels, Cellpose | [Image segmentation][operation_Image_segmentation] | `ObjSeg` |

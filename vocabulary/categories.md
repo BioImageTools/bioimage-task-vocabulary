@@ -34,7 +34,7 @@ Where EDAM files a task example:
 3. Montage: [Montage][operation_Montage], under Visualisation.
 4. Stitching: [Image stitching][operation_Image_stitching], under Image reconstruction.
 5. Crop to ROI: [Image crop][operation__Rhb4iyLUQWY4HnhPpuqNNI], under Image processing.
-6. Rescale: [Geometrical transformation][operation_Geometrical_transform], under Image processing.
+6. Rescale: [Geometric transformation][operation_Geometrical_transform], under Image processing.
 7. Colocalization: [Colocalisation analysis][operation___Colocalisation_analysis], a sibling of Object feature extraction under Image analysis.
 8. Object counts: [Object counting][operation_Cell_counting], a sibling of Object feature extraction under Image analysis.
 9. Focus, saturation and empty FOVs: [Image validation][operation___Image_validation], a child of Validation.

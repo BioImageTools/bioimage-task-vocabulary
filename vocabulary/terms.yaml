@@ -1,9 +1,11 @@
 # External ontology terms referenced by this vocabulary, with their labels in
 # the ontology version used. Other files refer to them by id.
 #
-# EDAM-Bioimaging (edam:): release alpha06, whose operation tree matches the
-# current development version. Check ids and labels with:
-#   python scripts/build.py --edam-owl <path or URL to EDAM-bioimaging .owl>
+# EDAM-Bioimaging (edam:): release 1.0alpha pre-pre-release (2025-10-26), the
+# one served at https://edamontology.org/EDAM-bioimaging.owl. It has no stable
+# IDs yet: only the numeric ids (operation_2945 etc.) are permanent; the others
+# are provisional WebProtege ids that will change. Check ids and labels with:
+#   python scripts/build.py --edam-owl https://edamontology.org/EDAM-bioimaging.owl
 # IAO, SIO, NCIt: labels as shown by the EBI Ontology Lookup Service (OLS).
 
 terms:
@@ -14,7 +16,7 @@ terms:
   - {id: edam:operation_3434, label: Conversion}
   - {id: edam:operation_Cell_counting, label: Object counting}
   - {id: edam:operation_Feature_extraction, label: Object feature extraction}
-  - {id: edam:operation_Geometrical_transform, label: Geometrical transformation}
+  - {id: edam:operation_Geometrical_transform, label: Geometric transformation}
   - {id: edam:operation_Image_enhancement, label: Image enhancement}
   - {id: edam:operation_Image_processing, label: Image processing}
   - {id: edam:operation_Image_reconstruction, label: Image reconstruction}
