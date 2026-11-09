@@ -1,0 +1,33 @@
+# Which operations can follow a given operation?
+#
+# The compatibility rule from task_classification.md: task B can follow task A
+# when an output of A matches an input of B in type, subtype and role.
+#   - type/subtype: B's input accepts the output's kind, its parent type
+#     (an input taking any Label takes an instance Label), or any type.
+#   - role: if A's output has a role (e.g. a parameter Image from estimate),
+#     B's input must have the same role. An output without a role can fill
+#     any role (an instance Label can be a mask).
+# A match is necessary, not sufficient: names, granularity and scope must match too.
+#
+# Change the operation in VALUES. Run with: python scripts/query.py queries/next_operations.rq
+
+PREFIX btv:  <https://example.org/bioimage-task-vocabulary/>
+PREFIX op:   <https://example.org/bioimage-task-vocabulary/operation/>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+
+SELECT DISTINCT ?next ?kind ?inRole
+WHERE {
+  VALUES ?op { op:detect }
+
+  ?op   btv:signature/btv:output ?out .
+  ?out  btv:accepts ?kind .
+  ?next btv:signature/btv:input  ?in .
+
+  OPTIONAL { ?in btv:accepts ?inKind }
+  FILTER (!BOUND(?inKind) || ?inKind = ?kind || EXISTS { ?inKind skos:narrower ?kind })
+
+  OPTIONAL { ?out btv:role ?outRole }
+  OPTIONAL { ?in  btv:role ?inRole }
+  FILTER (!BOUND(?outRole) || (BOUND(?inRole) && ?inRole = ?outRole))
+}
+ORDER BY ?next ?kind

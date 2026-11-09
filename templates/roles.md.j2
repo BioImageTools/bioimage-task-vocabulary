@@ -1,0 +1,13 @@
+# Roles
+
+Part of the [task classification](../task_classification.md) · [Object types](object_types.md) · **Roles** · [Operations](operations.md) · [Categories](categories.md)
+
+What an input does in an [operation](operations.md), independent of its [type](object_types.md).
+
+| Role | Meaning | Examples |
+|---|---|---|
+{% for role in data.roles %}
+| {{ r.anchor(role) }}*{{ role.label }}* | {{ role.description }} | {% for ex in role.role_examples or [] %}{{ ex.text }}{% if ex.in_operation %} in {{ r.op_link(ex.in_operation, italic=True) }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %} |
+{% endfor %}
+
+A mask is a role, not a type: any [Label](object_types.md#label) can play it.

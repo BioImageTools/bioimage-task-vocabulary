@@ -13,9 +13,36 @@ The overview is [task_classification.md](task_classification.md), and each table
 - **[Compatibility](task_classification.md#compatibility)**: when task B can follow task A. The output and input must match in type, subtype and role, and also in name, granularity and scope.
 - **[Scope](task_classification.md#scope)**: a separate axis for how much data a task needs at once (FOV, well, plate or time series).
 
+## RDF
+
+The vocabulary is modelled in [LinkML](https://linkml.io) and published as RDF in [vocabulary/bioimage_task_vocabulary.ttl](vocabulary/bioimage_task_vocabulary.ttl). Every type, subtype, role, operation and category is a `skos:Concept`. Mappings to EDAM-Bioimaging use `skos:exactMatch` (a category named after an EDAM class), `skos:broadMatch` (the nearest broader EDAM class of a local category) and `skos:closeMatch` (operations and task examples). I/O signatures use `btv:signature`, `btv:input`, `btv:output`, `btv:accepts` and `btv:role`. Object types map to EDAM-Bioimaging, IAO, SIO and NCIt terms with `skos:exactMatch`, `skos:closeMatch`, `skos:narrowMatch` and `skos:relatedMatch`. Their equivalents in SpatialData and the BioImage Archive's MIFA annotation types are linked with `btv:dataModelEquivalent`, because those data models have no IRIs.
+
+The namespace is a local placeholder, `https://example.org/bioimage-task-vocabulary/`. It is declared once, in the schema's `prefixes`.
+
+[queries/next_operations.rq](queries/next_operations.rq) implements the [compatibility rule](task_classification.md#compatibility) in SPARQL. It lists the operations that can follow a given one.
+
 ## Maintaining
 
-EDAM-Bioimaging links are reference-style: a table cell reads `[Label][EDAM ID]`, and the URL for each ID is listed once at the bottom of the file. To add one, use the ID as the key and append `[ID]: https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING?p=classes&conceptid=http%3A%2F%2Fedamontology.org%2FID` with the ID substituted. Table rows carry `<a id="…"></a>` anchors so other files can link to them, e.g. `operations.md#detect`.
+The YAML files are the source of truth. The Markdown tables and the Turtle file are generated from them, so don't edit those by hand.
+
+| To change | Edit |
+|---|---|
+| a type, role, operation or category | `vocabulary/<table>.yaml` |
+| prose around a table | `templates/<table>.md.j2` |
+| an EDAM or other ontology ID or label | `vocabulary/terms.yaml` |
+| the model itself (classes, slots, RDF properties) | [schema/bioimage_task_vocabulary.yaml](schema/bioimage_task_vocabulary.yaml) |
+
+Then rebuild:
+
+```sh
+python -m venv .venv && .venv/bin/pip install -r requirements.txt   # once
+.venv/bin/python scripts/build.py           # validate and regenerate
+.venv/bin/python scripts/query.py queries/next_operations.rq
+```
+
+`build.py` validates the YAML against the schema and checks that every id is unique and every reference points to an existing id of the right class. It then writes the Markdown and Turtle. With `--edam-owl <file or URL>` it also checks every EDAM ID and label against the ontology. `--check` writes nothing and fails if a generated file is out of date. The [CI workflow](.github/workflows/check.yml) runs it, and the SPARQL query, on every push to `main` and every pull request.
+
+In the generated Markdown, table rows carry anchors such as `operations.md#detect`, and EDAM IDs link to BioPortal.
 
 ## Status
 
