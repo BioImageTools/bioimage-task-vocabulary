@@ -1,0 +1,24 @@
+# Categories
+
+Part of the [task classification](../task_classification.md) · [Object types](object_types.md) · [Roles](roles.md) · [Operations](operations.md) · **Categories**
+
+A category is a functional group from the image analyst's point of view: the step of the analysis a task serves. It groups [operations](operations.md).
+
+Categories follow the operation classes of [EDAM-Bioimaging](https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING/?p=classes) (release alpha06, whose operation tree matches the current development version). A category takes the EDAM label and ID when a matching class exists. Categories with no EDAM class are marked *local*, with the nearest EDAM class in brackets.
+
+{% set footnotes = r.footnotes() %}
+| Category | EDAM class | Operations | Task examples |
+|---|---|---|---|
+{% for c in data.categories %}
+| {{ r.anchor(c) }}{{ c.label }} | {% if c.exact_match %}{{ r.edam_id(c.exact_match) }}{% else %}*local* (nearest: {{ r.edam(c.broad_match) }}){% endif %} | {% for o in c.operations %}{{ r.op_link(o) }}{% if not loop.last %}, {% endif %}{% endfor %}{% if c.more_operations %}, …{% endif %} | {{ r.task_examples(c, footnotes) }} |
+{% endfor %}
+
+Where EDAM files a task example:
+
+{% for n in footnotes %}
+{{ n.number }}. {{ r.cap(r.join_and(n.examples)) }}: {{ r.edam(n.term) }}{% if n.note %}, {{ n.note }}{% endif %}.
+{% endfor %}
+
+EDAM also places Filament tracing under Image segmentation and Spot detection under Image feature detection; they stay separate categories here because each has its own EDAM class.
+
+An operation can appear in several categories: {{ r.op_link("op:estimate", italic=True) }} and {{ r.op_link("op:apply", italic=True) }} in Image correction and Image registration, {{ r.op_link("op:detect", italic=True) }} in Image segmentation, Spot detection and Object tracking, {{ r.op_link("op:link", italic=True) }} in Object tracking and in Image reshaping when merging objects across FOVs.

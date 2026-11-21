@@ -1,0 +1,17 @@
+# Operations
+
+Part of the [task classification](../task_classification.md) · [Object types](object_types.md) · [Roles](roles.md) · **Operations** · [Categories](categories.md)
+
+An operation is characterized by the [types](object_types.md) and [roles](roles.md) of the objects it reads and writes. Roles in parentheses, optional inputs in brackets. Operations are grouped into [categories](categories.md).
+
+| Operation | I/O | Example | EDAM class | nf-bioimage-spec |
+|---|---|---|---|---|
+{% for op in data.operations %}
+{% for sig in op.signatures %}
+| {% if loop.first %}{{ r.anchor(op) }}*{{ op.label }}*{% endif %} | {{ r.io(sig) }} | {{ sig.example or "" }} | {% if sig.close_match %}{{ r.edam(sig.close_match) }}{% endif %} | {{ r.codes(sig.nf_bioimage_spec) }} |
+{% endfor %}
+{% endfor %}
+
+The EDAM class column gives the closest [EDAM-Bioimaging](https://bioportal.bioontology.org/ontologies/EDAM-BIOIMAGING/?p=classes) operation where one exists. It is left blank where EDAM has no class for the operation itself; *estimate* and *apply*, for example, are covered by the categories they serve.
+
+The nf-bioimage-spec column gives the matching category of nf-bioimage-spec, whose categories 3–11 come from the [NEUBIAS / BIAFLOWS problem classes](https://neubias-wg5.github.io/problem_class_ground_truth.html). `ObjTrk` is *detect* and *link* together.

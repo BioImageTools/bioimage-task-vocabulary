@@ -11,6 +11,8 @@ The vocabulary is split into one file per table:
 | [Operations](vocabulary/operations.md) | each operation's I/O signature, with its EDAM-Bioimaging and nf-bioimage-spec equivalents |
 | [Categories](vocabulary/categories.md) | functional groups of operations, aligned with EDAM-Bioimaging |
 
+These pages are generated from YAML sources in [vocabulary/](vocabulary/), which also produce an RDF version, [bioimage_task_vocabulary.ttl](vocabulary/bioimage_task_vocabulary.ttl). See the [README](README.md#maintaining).
+
 ## Compatibility
 
 Task B can follow task A when an output of A matches a required input of B in [type](vocabulary/object_types.md), subtype and [role](vocabulary/roles.md): the parameter Table of [*estimate*](vocabulary/operations.md#estimate) feeds [*apply*](vocabulary/operations.md#apply), the instance Label of [*detect*](vocabulary/operations.md#detect) feeds [*split*](vocabulary/operations.md#split), [*filter*](vocabulary/operations.md#filter) and [*measure*](vocabulary/operations.md#measure).
